@@ -6,6 +6,12 @@
         var self = this;
 
         self.toLocaleDate = function (year, month, day, hours, minutes, seconds, milliseconds) {
+            var date = self.toDate(year, month, day, hrs, mins, secs, millisecs);
+
+            return new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+        }
+
+        self.toDate = function (year, month, day, hours, minutes, seconds, milliseconds) {
             var hrs = 0;
             var mins = 0;
             var secs = 0;
@@ -18,10 +24,8 @@
                 secs = seconds;
             if (milliseconds >= 0)
                 millisecs = milliseconds;
-            
-            var date= new Date(year, month, day, hrs, mins, secs, millisecs);
 
-            return new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+            return new Date(year, month, day, hrs, mins, secs, millisecs);
         }
 
     }
