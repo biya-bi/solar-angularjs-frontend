@@ -1,0 +1,74 @@
+<div>
+	<div class="table-wrapper">
+		<div class="table-title">
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="list-title">Panels</div>
+				</div>
+				<div class="col-sm-6">
+					<a href="#panelAddEditModel" class="btn btn-success" data-toggle="modal" ng-click="panelCtrl.beginAdd('#panelAddEditModel')"><i
+						 class="material-icons">&#xE147;</i>
+						<span>Add New Panel</span></a>
+					<a href="#panelDeleteModel" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+				</div>
+			</div>
+		</div>
+		<alert message="panelCtrl.successMessage" type="alert-success"></alert>
+		<alert message="panelCtrl.errorMessage" type="alert-danger"></alert>
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>
+						<span class="custom-checkbox">
+							<input type="checkbox" id="selectAll">
+							<label for="selectAll"></label>
+						</span>
+					</th>
+					<th style="width:auto">Serial</th>
+					<th style="width:auto">Latitude</th>
+					<th style="width:auto">Longitude</th>
+					<th style="width:auto">Brand</th>
+					<th style="width:auto">Unit of measure</th>
+					<th style="width:auto">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="panel in panelCtrl.panels" ng-click="panelCtrl.select($index)">
+					<td>
+						<span class="custom-checkbox">
+							<input type="checkbox" name="options[]" value="1">
+							<label></label>
+						</span>
+					</td>
+					<td>{{panel.serial}}</td>
+					<td>{{panel.latitude}}</td>
+					<td>{{panel.longitude}}</td>
+					<td>{{panel.brand}}</td>
+					<td ng-controller="UnitOfMeasureController as uomCtrl">{{uomCtrl.getName(panel.unitOfMeasure)}}</td>
+					<td>
+						<a ng-click="panelCtrl.beginEdit($index,'#panelAddEditModel')" href="#panelAddEditModel" class="edit" data-toggle="modal"><i
+							 class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+						<a ng-click="panelCtrl.beginDelete($index,'#panelDeleteModel')" href="#panelDeleteModel" class="delete" data-toggle="modal"><i
+							 class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+						<a href="#hourlyElectricities" ng-click="hourlyElectricityCtrl.read(panel)">
+							<i class="material-icons" data-toggle="tooltip" title="View Houly Electricities" ng-click="navCtlr.select('hourly_electricities')">timer</i></a>
+						<a href="#daily_electricities" ng-click="dailyElectricityCtrl.read(panel)">
+							<i class="material-icons" data-toggle="tooltip" title="View Daily Electricities" ng-click="navCtlr.select('daily_electricities')">date_range</i></a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div ng-app="paginationModule" ng-controller="PageController as pageCtrl" class="clearfix" ng-show="panelCtrl.panels.length>0">
+		<div class="hint-text">Showing <b>{{panelCtrl.panels.length}}</b> out of <b>{{panelCtrl.totalItems}}</b> entries</div>
+		<div>
+			<ul class="pagination-sm" uib-pagination total-items="panelCtrl.totalItems" max-size="panelCtrl.noOfPages" ng-model="pageCtrl.currentPage"
+			 max-size="panelCtrl.noOfPages" num-pages="panelCtrl.noOfPages" items-per-page="pageCtrl.pageSize" ng-change="panelCtrl.read(pageCtrl.currentPage,pageCtrl.pageSize)"
+			 boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+		</div>
+	</div>
+	<!-- Add/Edit Modal HTML -->
+	<div id="panelAddEditModel" class="modal fade" ng-include="'views/panel/add_edit.html'"></div>
+	<!-- Delete Modal HTML -->
+	<div id="panelDeleteModel" class="modal fade" ng-include="'views/panel/delete.html'"></div>
+</div>

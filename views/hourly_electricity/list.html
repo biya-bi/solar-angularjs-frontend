@@ -1,0 +1,63 @@
+<div>
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="list-title">Hourly Electricities</div>
+                    <div>
+                        <table>
+                            <tr>
+                                <td>Panel serial:</td>
+                                <td><span class="panel-detail-value">{{hourlyElectricityCtrl.panel.serial}}</span></td>
+                            </tr>
+                            <tr>
+                                <td>Unit of measure:</td>
+                                <td ng-controller="UnitOfMeasureController as uomCtrl"><span class="panel-detail-value">{{uomCtrl.getName(hourlyElectricityCtrl.panel.unitOfMeasure)}}</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <a ng-disabled="hourlyElectricityCtrl.panel==null" href="#addEditPanelModal" class="btn btn-success" data-toggle="modal" ng-click="hourlyElectricityCtrl.beginAdd('#addEditPanelModal')"><i
+                            class="material-icons">&#xE147;</i>
+                        <span>Add Hourly Electricity</span></a>
+                    <a href="#deletePanelModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i>
+                        <span>Delete</span></a>
+                </div>
+            </div>
+        </div>
+        <alert message="hourlyElectricityCtrl.successMessage" type="alert-success"></alert>
+		<alert message="hourlyElectricityCtrl.errorMessage" type="alert-danger"></alert>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Generated units</th>
+                    <th>Reading date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="hourlyElectricity in hourlyElectricityCtrl.hourlyElectricities">
+                    <td>{{hourlyElectricity.generatedElectricity}}</td>
+                    <td ng-controller="DateController as dateCtrl">
+                        {{dateCtrl.toLocaleDate(hourlyElectricity.readingAt[0],
+                        hourlyElectricity.readingAt[1]-1,hourlyElectricity.readingAt[2],hourlyElectricity.readingAt[3],hourlyElectricity.readingAt[4],
+                        hourlyElectricity.readingAt[5])|date:'medium'}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div ng-app="paginationModule" ng-controller="PageController as pageCtrl" class="clearfix" ng-show="hourlyElectricityCtrl.hourlyElectricities.length>0">
+        <div class="hint-text">Showing <b>{{hourlyElectricityCtrl.hourlyElectricities.length}}</b> out of <b>{{hourlyElectricityCtrl.totalItems}}</b>
+            entries</div>
+        <div>
+            <ul class="pagination-sm" uib-pagination total-items="hourlyElectricityCtrl.totalItems" max-size="hourlyElectricityCtrl.noOfPages"
+                ng-model="pageCtrl.currentPage" max-size="hourlyElectricityCtrl.noOfPages" num-pages="hourlyElectricityCtrl.noOfPages"
+                items-per-page="pageCtrl.pageSize" ng-change="hourlyElectricityCtrl.read(hourlyElectricityCtrl.panel,pageCtrl.currentPage,pageCtrl.pageSize)"
+                boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+        </div>
+    </div>
+    <!-- Add/Edit Modal HTML -->
+    <div id="addEditPanelModal" class="modal fade" ng-include="'views/hourly_electricity/add_edit.html'"></div>
+</div>

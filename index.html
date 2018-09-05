@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html ng-app="panelModule">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Solar</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular-sanitize.min.js"></script>
+
+    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+
+    <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="css/style.css">
+
+
+    <script src="js/table.js"></script>
+    <script src="modules/panel.module.js"></script>
+    <script src="directives/alert.directive.js"></script>
+    <script src="services/panel.service.js"></script>
+    <script src="controllers/panel.controller.js"></script>
+    <script src="controllers/navigation.controller.js"></script>
+    <script src="controllers/pagination.controller.js"></script>
+    <script src="controllers/hourlyElectricity.controller.js"></script>
+    <script src="controllers/datepicker.controller.js"></script>
+    <script src="controllers/date.controller.js"></script>
+    <script src="controllers/unitOfMeasure.controller.js"></script>
+    <script src="controllers/dailyElectricity.controller.js"></script>
+</head>
+
+<body>
+    <div ng-controller="NavigationController as navCtlr">
+        <div ng-controller="PanelController as panelCtrl">
+            <div ng-controller="HourlyElectricityController as hourlyElectricityCtrl">
+                <div ng-controller="DailyElectricityController as dailyElectricityCtrl">
+                    <span class="sidenav-toggle" ng-click="navCtlr.toggle()">&#9776;</span>
+                    <span class="application-title">Solar</span>
+                    <div id="mySidenav" class="sidenav">
+                        <a href="#panels" ng-click="navCtlr.select('panels')">Panels</a>
+                        <a href="#hourly_electricities" ng-click="navCtlr.select('hourly_electricities')">Hourly Electricities</a>
+                        <a href="#daily_electricities" ng-click="navCtlr.select('daily_electricities')">Daily Electricities</a>
+                    </div>
+                    <div id="myMain" class="main">
+                        <div ng-show="navCtlr.isSelected('panels')" ng-include="'views/panel/list.html'"></div>
+                        <div ng-show="navCtlr.isSelected('hourly_electricities')" ng-include="'views/hourly_electricity/list.html'"></div>
+                        <div ng-show="navCtlr.isSelected('daily_electricities')" ng-include="'views/daily_electricity/list.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
