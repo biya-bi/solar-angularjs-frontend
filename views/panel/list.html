@@ -6,10 +6,10 @@
 					<div class="list-title">Panels</div>
 				</div>
 				<div class="col-sm-6">
-					<a href="#panelAddEditModel" class="btn btn-success" data-toggle="modal" ng-click="panelCtrl.beginAdd('#panelAddEditModel')"><i
+					<a href="#panelAddEditDialog" class="btn btn-success" data-toggle="modal" ng-click="panelCtrl.beginAdd('#panelAddEditDialog')"><i
 						 class="material-icons">&#xE147;</i>
 						<span>Add New Panel</span></a>
-					<a href="#panelDeleteModel" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+					<a href="#panelDeleteDialog" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
 				</div>
 			</div>
 		</div>
@@ -46,9 +46,9 @@
 					<td>{{panel.brand}}</td>
 					<td ng-controller="UnitOfMeasureController as uomCtrl">{{uomCtrl.getName(panel.unitOfMeasure)}}</td>
 					<td>
-						<a ng-click="panelCtrl.beginEdit($index,'#panelAddEditModel')" href="#panelAddEditModel" class="edit" data-toggle="modal"><i
+						<a ng-click="panelCtrl.beginEdit($index,'#panelAddEditDialog')" href="#panelAddEditDialog" class="edit" data-toggle="modal"><i
 							 class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-						<a ng-click="panelCtrl.beginDelete($index,'#panelDeleteModel')" href="#panelDeleteModel" class="delete" data-toggle="modal"><i
+						<a ng-click="panelCtrl.beginDelete($index,'#panelDeleteDialog')" href="#panelDeleteDialog" class="delete" data-toggle="modal"><i
 							 class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 						<a href="#hourlyElectricities" ng-click="hourlyElectricityCtrl.read(panel)">
 							<i class="material-icons" data-toggle="tooltip" title="View Houly Electricities" ng-click="navCtlr.select('hourly_electricities')">timer</i></a>
@@ -68,7 +68,7 @@
 		</div>
 	</div>
 	<!-- Add/Edit Modal HTML -->
-	<div id="panelAddEditModel" class="modal fade" ng-include="'views/panel/add_edit.html'"></div>
+	<div id="panelAddEditDialog" class="modal fade" ng-include="'views/panel/add_edit.html'"></div>
 	<!-- Delete Modal HTML -->
-	<div id="panelDeleteModel" class="modal fade" ng-include="'views/panel/delete.html'"></div>
+	<div id="panelDeleteDialog" class="modal fade" ng-include="'views/panel/delete.html'"></div>
 </div>
