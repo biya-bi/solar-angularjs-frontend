@@ -1,48 +1,44 @@
-<div>
-    <div class="table-wrapper">
-        <div class="table-title">
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="list-title">Daily Electricities</div>
-                    <div>
-                        <table>
-                            <tr>
-                                <td>Panel serial:</td>
-                                <td><span class="panel-detail-value">{{dailyElectricityCtrl.panel.serial}}</span></td>
-                            </tr>
-                            <tr>
-                                <td>Unit of measure:</td>
-                                <td ng-controller="UnitOfMeasureController as uomCtrl"><span class="panel-detail-value">{{uomCtrl.getName(dailyElectricityCtrl.panel.unitOfMeasure)}}</span></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
+<div layout="row" ng-cloak>
+    <div flex="">
+        <md-toolbar class="md-hue-2">
+            <div class="md-toolbar-tools">
+                <div class="md-headline list-title">Daily Electricities</div>
             </div>
-        </div>
-        <div class="alert alert-info">The daily electricity dates are displayed in UTC.</div>
-        <alert message="dailyElectricityCtrl.successMessage" type="alert-success"></alert>
-        <alert message="dailyElectricityCtrl.errorMessage" type="alert-danger"></alert>
-        <table class="table table-striped table-hover">
-            <thead>
+        </md-toolbar>
+        <md-content flex>
+            <table>
                 <tr>
-                    <th style="width:auto">Date</th>
-                    <th style="width:auto">Sum</th>
-                    <th style="width:auto">Average</th>
-                    <th style="width:auto">Minimum</th>
-                    <th style="width:auto">Maximum</th>
+                    <td><span class="panel-summary-label">Panel serial:</span></td>
+                    <td><span class="panel-summary-value">{{dailyElectricityCtrl.panel.serial}}</span></td>
                 </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="dailyElectricity in dailyElectricityCtrl.dailyElectricities">
-                    <td ng-controller="DateController as dateCtrl">
-                        {{dateCtrl.toDate(dailyElectricity.date[0], dailyElectricity.date[1]-1,dailyElectricity.date[2],0,0,0)|date:'mediumDate'}}
-                    </td>
-                    <td>{{dailyElectricity.sum}}</td>
-                    <td>{{dailyElectricity.average}}</td>
-                    <td>{{dailyElectricity.min}}</td>
-                    <td>{{dailyElectricity.max}}</td>
+                <tr>
+                    <td><span class="panel-summary-label">Unit of measure:</span></td>
+                    <td ng-controller="UnitOfMeasureController as uomCtrl"><span class="panel-summary-value">{{uomCtrl.getName(dailyElectricityCtrl.panel.unitOfMeasure)}}</span></td>
                 </tr>
-            </tbody>
-        </table>
+            </table>
+            <span md-colors="{color:'primary'}">The daily electricity dates are displayed in UTC.</span>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th style="width:auto">Date</th>
+                        <th style="width:auto">Sum</th>
+                        <th style="width:auto">Average</th>
+                        <th style="width:auto">Minimum</th>
+                        <th style="width:auto">Maximum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="dailyElectricity in dailyElectricityCtrl.dailyElectricities">
+                        <td ng-controller="DateController as dateCtrl">
+                            {{dateCtrl.toDate(dailyElectricity.date[0], dailyElectricity.date[1]-1,dailyElectricity.date[2],0,0,0)|date:'mediumDate'}}
+                        </td>
+                        <td>{{dailyElectricity.sum}}</td>
+                        <td>{{dailyElectricity.average}}</td>
+                        <td>{{dailyElectricity.min}}</td>
+                        <td>{{dailyElectricity.max}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-content>
     </div>
 </div>

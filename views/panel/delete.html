@@ -1,19 +1,24 @@
-<div class="modal-dialog">
-    <div class="modal-content">
-        <form>
-            <div class="modal-header">
+<md-dialog>
+    <form ng-cloak novalidate>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
                 <h4 class="modal-title">Delete Panel</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="panelCtrl.cancel()">
+                    <md-icon md-svg-src="/img/icons/close_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
             </div>
-            <div class="alert alert-danger" ng-if="panelCtrl.errorMessage">{{panelCtrl.errorMessage}}</div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete these Records?</p>
-                <p class="text-warning"><small>This action cannot be undone.</small></p>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <p>Are you sure you want to delete?</p>
+                <small md-colors="{color: 'red-500'}">This action cannot be undone.</small>
             </div>
-            <div class="modal-footer">
-                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                <input type="submit" class="btn btn-danger" value="Delete" ng-click="panelCtrl.delete()">
-            </div>
-        </form>
-    </div>
-</div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button class="md-raised" ng-click="panelCtrl.cancel()">Cancel</md-button>
+            <md-button class="md-raised md-warn" ng-click="panelCtrl.process(panelCtrl.panel)">Delete</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

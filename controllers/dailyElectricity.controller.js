@@ -3,7 +3,7 @@
 
     app.controller("DailyElectricityController", DailyElectricityController);
 
-    function DailyElectricityController(PanelService) {
+    function DailyElectricityController(PanelService, $mdToast) {
         var self = this;
  
         self.read = function (panel) {
@@ -14,9 +14,19 @@
                     self.dailyElectricities = dailyElectricities;
                 },
                 function () {
-                    self.errorMessage = "An error occurred while loading daily electricities.";
+                    showToast( "An error occurred while loading daily electricities.");
                 }
             );
         }
     }
+
+    function showToast(message) {
+        $mdToast.show(
+            $mdToast.simple()
+                .textContent(message)
+                .hideDelay(10000)
+                .position("top right")
+        );
+    }
+
 })();

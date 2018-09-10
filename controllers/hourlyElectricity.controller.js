@@ -3,30 +3,16 @@
 
     app.controller("HourlyElectricityController", HourlyElectricityController);
 
-    function HourlyElectricityController(PanelService, PageSizeSvc) {
+    function HourlyElectricityController(PanelService, PageSizeSvc, $mdDialog, $mdToast) {
         var self = this;
         self.isInAddMode = false;
         self.isInEditMode = false;
 
-        self.addDialog = undefined;
-        self.editDialog = undefined;
-        self.deleteDialog = undefined;
-
         self.pageSize = PageSizeSvc;
         self.currentPage = 1;
 
-        var clearMessages = function () {
-            self.successMessage = undefined;
-            self.errorMessage = undefined;
-        }
-
-        self.select = function (index) {
+        function select(index) {
             self.selectedHourlyElectricity = self.hourlyElectricities[index];
-            clearMessages();
-        }
-
-        var toggleEditMode = function () {
-            self.isInEditMode = !self.isInEditMode;
         }
 
         function computePages(size) {
@@ -60,52 +46,102 @@
             );
         }
 
-        self.canAdd = function () {
-            return self.panel != null;
+        self.save = function (panel, hourlyElectricity) {
+            self.panel = panel;
+            if (self.isInAddMode) {
+                PanelService.createHourlyElectricity(panel, hourlyElectricity).then(function () {
+                    onSaveSuccess("Hourly Electricity saved successfully.");
+                    self.isInAddMode = false;
+                }, function (response) {
+                    onSaveFailure(response, "An error occurred while saving the hourly electricity.");
+                });
+            }
+            else if (self.isInEditMode) {
+                PanelService.updateHourlyElectricity(panel, hourlyElectricity).then(function () {
+                    onSaveSuccess("Hourly Electricity saved successfully.");
+                    self.isInEditMode = false;
+                }, function (response) {
+                    onSaveFailure(response, "An error occurred while saving the hourly electricity.");
+                });
+            }
+            else if (self.isInDeleteMode) {
+                PanelService.deleteHourlyElectricity(panel, hourlyElectricity).then(function () {
+                    onSaveSuccess("Hourly Electricity deleted successfully.");
+                    self.isInDeleteMode = false;
+                }, function (response) {
+                    onSaveFailure(response, "An error occurred while deleting the hourly electricity.");
+                });
+            }
         }
 
-        self.beginAdd = function (dlg) {
-            clearMessages();
+        function DialogController($mdDialog, mode, process, panel, hourlyElectricity) {
+            let self = this;
+
+            self.mode = mode;
+            self.process = process;
+            self.panel = panel;
+            self.hourlyElectricity = hourlyElectricity;
+
+            self.hide = function () {
+                $mdDialog.hide();
+            };
+
+            self.cancel = function () {
+                $mdDialog.cancel();
+            };
+        }
+
+        function getDialogOptions(evt, mode, process, templateUrl, panel, hourlyElectricity) {
+            return {
+                preserveScope: true,
+                locals: { mode: mode, process: process, panel: panel, hourlyElectricity: hourlyElectricity },
+                controllerAs: 'hourlyElectricityCtrl',
+                controller: DialogController,
+                templateUrl: templateUrl,
+                parent: angular.element(document.body),
+                targetEvent: evt,
+                clickOutsideToClose: true,
+            };
+        }
+
+        self.add = function (panel, event) {
             self.isInAddMode = true;
             self.isInEditMode = false;
-            self.selectedHourlyElectricity = undefined;
-            self.addDialog = dlg;
+            self.isInDeleteMode = false;
+            self.panel = panel;
+
+            $mdDialog.show(getDialogOptions(event, 'add', self.save, '/views/hourly_electricity/add_edit.html', self.panel));
         }
 
-        self.save = function () {
-            clearMessages();
-
-            var dlg = undefined;
-
-            if (self.isInAddMode) {
-                PanelService.createHourlyElectricity(self.panel, self.selectedHourlyElectricity).then(function () {
-                    onSaveSuccess(self.addDialog);
-                    self.isInAddMode = false;
-                }, onSaveFailure)
-            }
-            else {
-                PanelService.updatePanel(self.selectedPanel).then(function () {
-                    onSaveSuccess(self.editDialog);
-                    self.isInEditMode = false;
-                }, onSaveFailure);
-            }
+        function showToast(message) {
+            $mdToast.show(
+                $mdToast.simple()
+                    .textContent(message)
+                    .hideDelay(10000)
+                    .position("top right")
+            );
         }
 
-        function onSaveSuccess(dlg) {
-            self.successMessage = "Hourly electricity saved successfully.";
-            if (dlg != null)
-                $(dlg).modal('hide');
+        function onSaveSuccess(message) {
+            showToast(message);
+            $mdDialog.hide();
             self.read(self.panel, self.currentPage, PageSizeSvc);
         }
 
-        function onSaveFailure(response) {
+        function onSaveFailure(response, message) {
+            var msg;
             switch (response.data.code) {
                 case 2001:
-                case 2002: self.errorMessage = response.data.message;
+                case 2002: msg = response.data.message;
                     break;
-                default: self.errorMessage = "An error occurred while saving the hourly electricity.";
+                default: msg = message;
                     break;
             }
+            showToast(msg);
+        }
+                
+        self.canAdd = function () {
+            return self.panel != null;
         }
     }
 })();

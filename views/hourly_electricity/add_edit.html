@@ -1,46 +1,49 @@
-<div class="modal-dialog">
-    <div class="modal-content">
-        <form name="hourlyElectricityAddEditForm" novalidate>
-            <div class="modal-header">
-                <h4 class="modal-title" ng-if="hourlyElectricityCtrl.isInAddMode">Add Hourly Electricity</h4>
-                <h4 class="modal-title" ng-if="hourlyElectricityCtrl.isInEditMode">Edit Hourly Electricity</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+<md-dialog>
+    <form name="hourlyElectricityAddEditForm" ng-cloak novalidate>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>
+                    <h4 class="modal-title" ng-if="hourlyElectricityCtrl.mode=='add'">Add Hourly Electricity</h4>
+                    <h4 class="modal-title" ng-if="hourlyElectricityCtrl.mode=='edit'">Edit Hourly Electricity</h4>
+                </h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="hourlyElectricityCtrl.cancel()">
+                    <md-icon md-svg-src="/img/icons/close_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
             </div>
-            <alert message="hourlyElectricityCtrl.errorMessage" type="alert-danger"></alert>
-            <div class="modal-body">
-                <div class="form-group">
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+
+                <md-input-container class="md-block">
                     <label for="generatedElectricity">Generated electricity</label>
-                    <input id="generatedElectricity" name="generatedElectricity" type="number" class="form-control" ng-model="hourlyElectricityCtrl.selectedHourlyElectricity.generatedElectricity"
+                    <input id="generatedElectricity" name="generatedElectricity" type="number" class="form-control" ng-model="hourlyElectricityCtrl.hourlyElectricity.generatedElectricity"
                         required>
-                    <span ng-show="hourlyElectricityAddEditForm.generatedElectricity.$dirty && hourlyElectricityAddEditForm.generatedElectricity.$invalid"
-                        class="text-danger">
-                        <span ng-show="hourlyElectricityAddEditForm.generatedElectricity.$error.required"> The generated
-                            electricity is required.</span>
-                        <span ng-show="hourlyElectricityAddEditForm.generatedElectricity.$error.number"> The generated electricity
-                            is invalid.</span>
-                    </span>
-                </div>
-                <div class="form-group" ng-controller="DatepickerController as datepickerCtrl">
-                    <label for="readingDate">Reading date</label>
-                    <div class="input-group">
-                        <input id="readingDate" name="readingDate" type="text" class="form-control" uib-datepicker-popup="medium" ng-model="hourlyElectricityCtrl.selectedHourlyElectricity.readingAt"
-                            is-open="datepickerCtrl.popup.opened" datepicker-options="datepickerCtrl.dateOptions" ng-required="true"
-                            close-text="Close" />
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-default" ng-click="datepickerCtrl.open()"><i class="glyphicon glyphicon-calendar"></i></button>
-                        </span>
+                    <div ng-messages="hourlyElectricityAddEditForm.generatedElectricity.$error" role="alert" multiple="">
+                        <div ng-message="required" class="my-message">The generated electricity is required.</div>
+                        <div ng-message="number" class="my-message">The generated electricity is invalid.</div>
                     </div>
-                    <span ng-show="hourlyElectricityAddEditForm.readingDate.$dirty && hourlyElectricityAddEditForm.readingDate.$invalid"
-                        class="text-danger">
-                        <span ng-show="hourlyElectricityAddEditForm.readingDate.$error.required"> The reading date is required.</span>
-                        <span ng-show="hourlyElectricityAddEditForm.readingDate.$error.date"> The reading date is invalid.</span>
-                    </span>
-                </div>
+                </md-input-container>
+
+                <md-input-container>
+                    <label for="readingDate">Reading date</label>
+                    <md-datepicker id="readingDate" name="readingDate" ng-model="hourlyElectricityCtrl.hourlyElectricity.readingAt" required></md-datepicker>
+                    <div ng-messages="hourlyElectricityAddEditForm.readingDate.$error" role="alert" multiple="">
+                        <div ng-message="required" class="my-message">The reading date is required.</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container>
+                    <label for="readingTime">Reading time</label>
+                    <input id="readingTime" name="readingTime" mdc-datetime-picker date="false" time="true" type="text" short-time="true" show-todays-date
+                        click-outside-to-close="true" auto-ok="true" min-date="minDate" minute-steps="1" format="hh:mm a" ng-model="hourlyElectricityCtrl.hourlyElectricity.readingAt">
+                </md-input-container>
             </div>
-            <div class="modal-footer">
-                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                <input type="submit" class="btn btn-info" value="Save" ng-click="hourlyElectricityCtrl.save()" ng-disabled="hourlyElectricityAddEditForm.$invalid">
-            </div>
-        </form>
-    </div>
-</div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button class="md-raised" ng-click="hourlyElectricityCtrl.cancel()">Cancel</md-button>
+            <md-button class="md-raised md-primary" ng-click="hourlyElectricityCtrl.process(hourlyElectricityCtrl.panel, hourlyElectricityCtrl.hourlyElectricity)"
+                ng-disabled="hourlyElectricityAddEditForm.$invalid">Save</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

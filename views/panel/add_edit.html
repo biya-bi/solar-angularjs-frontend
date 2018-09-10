@@ -1,53 +1,70 @@
-<div class="modal-dialog">
-    <div class="modal-content">
-        <form name="panelAddEditForm" novalidate>
-            <div class="modal-header">
-                <h4 class="modal-title" ng-if="panelCtrl.isInAddMode">Add Panel</h4>
-                <h4 class="modal-title" ng-if="panelCtrl.isInEditMode">Edit Panel</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+<md-dialog>
+    <form name="panelAddEditForm" ng-cloak novalidate>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>
+                    <h4 class="modal-title" ng-if="panelCtrl.mode=='add'">Add Panel</h4>
+                    <h4 class="modal-title" ng-if="panelCtrl.mode=='edit'">Edit Panel</h4>
+                </h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="panelCtrl.cancel()">
+                    <md-icon md-svg-src="/img/icons/close_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
             </div>
-            <alert message="panelCtrl.errorMessage" type="alert-danger"></alert>
-            <div class="modal-body">
-                <div class="form-group">
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+
+                <md-input-container class="md-block">
                     <label for="serial">Serial</label>
-                    <input id="serial" name="serial" type="text" class="form-control" ng-model="panelCtrl.selectedPanel.serial" required>
-                    <span ng-show="panelAddEditForm.serial.$dirty && panelAddEditForm.serial.$invalid" class="text-danger">The
-                        serial is required.</span>
-                </div>
-                <div class="form-group">
+                    <input id="serial" name="serial" type="text" ng-model="panelCtrl.panel.serial" required>
+                    <div ng-messages="panelAddEditForm.serial.$error" role="alert">
+                        <div ng-message="required" class="my-message">The serial is required.</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container class="md-block">
                     <label for="latitude">Latitude</label>
-                    <input id="latitude" name="latitude" class="form-control" ng-model="panelCtrl.selectedPanel.latitude" type="number" step="0.000001"
-                        required>
-                    <span ng-show="panelAddEditForm.latitude.$dirty && panelAddEditForm.latitude.$invalid" class="text-danger">
-                        <span ng-show="panelAddEditForm.latitude.$error.required"> The latitude is required.</span>
-                        <span ng-show="panelAddEditForm.latitude.$error.number"> The latitude is invalid.</span>
-                    </span>
-                </div>
-                <div class="form-group">
+                    <input id="latitude" name="latitude" ng-model="panelCtrl.panel.latitude" type="number" step="0.000001" required>
+                    <div ng-messages="panelAddEditForm.latitude.$error" role="alert" multiple="">
+                        <div ng-message="required" class="my-message">The latitude is required.</div>
+                        <div ng-message="number" class="my-message">The latitude is invalid.</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container class="md-block">
                     <label for="longitude">Longitude</label>
-                    <input id="longitude" name="longitude" type="number" class="form-control" ng-model="panelCtrl.selectedPanel.longitude" type="number"
-                        step="0.000001" required>
-                    <span ng-show="panelAddEditForm.longitude.$dirty && panelAddEditForm.longitude.$invalid" class="text-danger">
-                        <span ng-show="panelAddEditForm.longitude.$error.required"> The longitude is required.</span>
-                        <span ng-show="panelAddEditForm.longitude.$error.number"> The longitude is invalid.</span>
-                    </span>
-                </div>
-                <div class="form-group">
-                    <label>Brand</label>
-                    <input type="text" class="form-control" ng-model="panelCtrl.selectedPanel.brand">
-                </div>
-                <div class="form-group">
+                    <input id="longitude" name="longitude" type="number" ng-model="panelCtrl.panel.longitude" type="number" step="0.000001"
+                        required>
+                    <div ng-messages="panelAddEditForm.longitude.$error" role="alert" multiple="">
+                        <div ng-message="required" class="my-message">The longitude is required.</div>
+                        <div ng-message="number" class="my-message">The longitude is invalid.</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container class="md-block">
+                    <label for="brand">Brand</label>
+                    <input id="brand" name="brand" type="text" class="form-control" ng-model="panelCtrl.panel.brand">
+                </md-input-container>
+
+                <md-input-container class="md-block">
                     <label for="unitOfMeasure">Unit of measure</label>
-                    <select ng-controller="UnitOfMeasureController as uomCtrl" id="unitOfMeasure" name="unitOfMeasure" class="form-control" ng-model="panelCtrl.selectedPanel.unitOfMeasure"
-                        ng-options="uom.value as uom.name for uom in uomCtrl.unitsOfMeasure" required><option></option></select>
-                    <span ng-show="panelAddEditForm.unitOfMeasure.$dirty && panelAddEditForm.unitOfMeasure.$invalid" class="text-danger">
-                        The unit of measure is required.</span>
-                </div>
+                    <md-select id="unitOfMeasure" name="unitOfMeasure" ng-controller="UnitOfMeasureController as uomCtrl"
+                        ng-model="panelCtrl.panel.unitOfMeasure" required>
+                        <md-option ng-repeat="uom in uomCtrl.unitsOfMeasure" value="{{uom.value}}">
+                            {{uom.name}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="panelAddEditForm.unitOfMeasure.$error" role="alert">
+                        <div ng-message="required" class="my-message">The unit of measure is required.</div>
+                    </div>
+                </md-input-container>
+                
             </div>
-            <div class="modal-footer">
-                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                <input type="submit" class="btn btn-info" value="Save" ng-click="panelCtrl.save()" ng-disabled="panelAddEditForm.$invalid">
-            </div>
-        </form>
-    </div>
-</div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button class="md-raised" ng-click="panelCtrl.cancel()">Cancel</md-button>
+            <md-button class="md-raised md-primary" ng-click="panelCtrl.process(panelCtrl.panel)" ng-disabled="panelAddEditForm.$invalid">Save</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

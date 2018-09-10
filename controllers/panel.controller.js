@@ -3,30 +3,14 @@
 
     app.controller("PanelController", PanelController);
 
-    function PanelController(PanelService, PageSizeSvc) {
+    function PanelController(PanelService, PageSizeSvc, $mdDialog, $mdToast) {
         var self = this;
-        self.isInAddMode = false;
-        self.isInEditMode = false;
-
-        self.addDialog = undefined;
-        self.editDialog = undefined;
-        self.deleteDialog = undefined;
 
         self.pageSize = PageSizeSvc;
         self.currentPage = 1;
 
-        var clearMessages = function () {
-            self.successMessage = undefined;
-            self.errorMessage = undefined;
-        }
-
-        self.select = function (index) {
+        function select(index) {
             self.selectedPanel = self.panels[index];
-            clearMessages();
-        }
-
-        var toggleEditMode = function () {
-            self.isInEditMode = !self.isInEditMode;
         }
 
         function computePages(size) {
@@ -36,7 +20,7 @@
                     self.noOfPages = Math.ceil(parseFloat(count) / size);
                 },
                 function () {
-                    self.errorMessage = "An error occurred while computing panel pages.";
+                    showToast("An error occurred while computing panel pages.");
                 }
             );
         }
@@ -54,87 +38,121 @@
                     self.panels = panels;
                 },
                 function () {
-                    self.errorMessage = "An error occurred while loading panels.";
+                    showToast("An error occurred while loading panels.");
                 }
             );
         }
 
         self.read(self.currentPage, PageSizeSvc);
 
-        function onSaveSuccess(dlg) {
-            self.successMessage = "Panel saved successfully.";
-            if (dlg != null)
-                $(dlg).modal('hide');
+        self.save = function (panel) {
+            if (self.isInAddMode) {
+                PanelService.createPanel(panel).then(function () {
+                    onSaveSuccess("Panel saved successfully.");
+                    self.isInAddMode = false;
+                }, function (response) {
+                    onSaveFailure(response, "An error occurred while saving the panel.");
+                });
+            }
+            else if (self.isInEditMode) {
+                PanelService.updatePanel(panel).then(function () {
+                    onSaveSuccess("Panel saved successfully.");
+                    self.isInEditMode = false;
+                }, function (response) {
+                    onSaveFailure(response, "An error occurred while saving the panel.");
+                });
+            }
+            else if (self.isInDeleteMode) {
+                PanelService.deletePanel(panel).then(function () {
+                    onSaveSuccess("Panel deleted successfully.");
+                    self.isInDeleteMode = false;
+                }, function (response) {
+                    onSaveFailure(response, "An error occurred while deleting the panel.");
+                });
+            }
+        }
+
+        function DialogController($mdDialog, mode, process, panel) {
+            let self = this;
+
+            self.mode = mode;
+            self.process = process;
+            self.panel = panel;
+
+            self.hide = function () {
+                $mdDialog.hide();
+            };
+
+            self.cancel = function () {
+                $mdDialog.cancel();
+            };
+        }
+
+        function getDialogOptions(event, mode, process, templateUrl, panel) {
+            return {
+                preserveScope: true,
+                locals: { mode: mode, process: process, panel: panel },
+                controllerAs: 'panelCtrl',
+                controller: DialogController,
+                templateUrl: templateUrl,
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose: true,
+            };
+        }
+
+        self.add = function (event) {
+            self.isInAddMode = true;
+            self.isInEditMode = false;
+            self.isInDeleteMode = false;
+
+            $mdDialog.show(getDialogOptions(event, 'add', self.save, '/views/panel/add_edit.html'));
+        }
+
+        self.edit = function (index, event) {
+            self.isInAddMode = false;
+            self.isInEditMode = true;
+            self.isInDeleteMode = false;
+            select(index);
+
+            $mdDialog.show(getDialogOptions(event, 'edit', self.save, '/views/panel/add_edit.html', self.selectedPanel));
+        }
+
+        self.delete = function (index, event) {
+            self.isInAddMode = false;
+            self.isInEditMode = false;
+            self.isInDeleteMode = true;
+            select(index);
+            $mdDialog.show(getDialogOptions(event, 'delete', self.save, '/views/panel/delete.html', self.selectedPanel));
+        }
+
+        function showToast(message) {
+            $mdToast.show(
+                $mdToast.simple()
+                    .textContent(message)
+                    .hideDelay(10000)
+                    .position("top right")
+            );
+        }
+
+        function onSaveSuccess(message) {
+            showToast(message);
+            $mdDialog.hide();
             self.read(self.currentPage, PageSizeSvc);
         }
 
-        function onSaveFailure(response) {
+        function onSaveFailure(response, message) {
+            var msg;
             switch (response.data.code) {
                 case 1001:
                 case 1002:
                 case 1003:
-                case 1004: self.errorMessage = response.data.message;
+                case 1004: msg = response.data.message;
                     break;
-                default: self.errorMessage = "An error occurred while saving the panel.";
+                default: msg = message;
                     break;
             }
-        }
-
-        self.save = function () {
-            clearMessages();
-
-            var dlg = undefined;
-
-            if (self.isInAddMode) {
-                PanelService.createPanel(self.selectedPanel).then(function () {
-                    onSaveSuccess(self.addDialog);
-                    self.isInAddMode = false;
-                }, onSaveFailure)
-            }
-            else {
-                PanelService.updatePanel(self.selectedPanel).then(function () {
-                    onSaveSuccess(self.editDialog);
-                    self.isInEditMode = false;
-                }, onSaveFailure);
-            }
-
-        }
-
-        self.beginAdd = function (dlg) {
-            clearMessages();
-            self.isInAddMode = true;
-            self.isInEditMode = false;
-            self.selectedPanel = undefined;
-            self.addDialog = dlg;
-        }
-
-        self.beginEdit = function (index, dlg) {
-            self.isInAddMode = false;
-            self.isInEditMode = true;
-            self.editDialog = dlg;
-            self.select(index);
-        }
-
-        self.beginDelete = function (index, dlg) {
-            self.deleteDialog = dlg;
-            self.select(index);
-        }
-
-        self.delete = function () {
-            toggleEditMode();
-            clearMessages();
-
-            PanelService.deletePanel(self.selectedPanel).then(
-                function () {
-                    self.successMessage = "Panel deleted successfully.";
-                    if (self.deleteDialog != null)
-                        $(self.deleteDialog).modal('hide');
-                    self.read(self.currentPage, PageSizeSvc);;
-                },
-                function () {
-                    self.errorMessage = "An error occurred while deleting the panel.";
-                }
-            );
+            showToast(msg);
         }
 
     }
