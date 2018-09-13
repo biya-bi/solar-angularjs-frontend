@@ -3,10 +3,10 @@
 
     app.service("PanelService", PanelService);
 
-    function PanelService($http, PanelRestEndPointSvc) {
+    function PanelService($http, PANEL_RESTFUL_ENDPOINT) {
 
         this.getPanels = function (page, size) {
-            var uri = PanelRestEndPointSvc;
+            var uri = PANEL_RESTFUL_ENDPOINT;
             if (page != null && size != null)
                 uri = uri + "?page=" + page + "&size=" + size;
             return $http.get(uri).then(
@@ -17,7 +17,7 @@
         }
 
         this.createPanel = function (panel) {
-            return $http.post(PanelRestEndPointSvc, panel)
+            return $http.post(PANEL_RESTFUL_ENDPOINT, panel)
                 .then(function (response) {
                     console.log(response);
                     return response.data;
@@ -36,7 +36,7 @@
         }
 
         this.getPanelsCount = function () {
-            return $http.get(PanelRestEndPointSvc + "/count").then(
+            return $http.get(PANEL_RESTFUL_ENDPOINT + "/count").then(
                 function (response) {
                     return response.data;
                 }

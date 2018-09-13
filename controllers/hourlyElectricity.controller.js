@@ -3,12 +3,12 @@
 
     app.controller("HourlyElectricityController", HourlyElectricityController);
 
-    function HourlyElectricityController(PanelService, PageSizeSvc, $mdDialog, $mdToast, ArrayDateService) {
+    function HourlyElectricityController(PanelService, PAGE_SIZE, $mdDialog, $mdToast, ArrayDateService) {
         var self = this;
         self.isInAddMode = false;
         self.isInEditMode = false;
 
-        self.pageSize = PageSizeSvc;
+        self.pageSize = PAGE_SIZE;
         self.currentPage = 1;
 
         function select(index) {
@@ -125,7 +125,7 @@
         function onSaveSuccess(message) {
             showToast(message);
             $mdDialog.hide();
-            self.read(self.panel, self.currentPage, PageSizeSvc);
+            self.read(self.panel, self.currentPage, PAGE_SIZE);
         }
 
         function onSaveFailure(response, message) {

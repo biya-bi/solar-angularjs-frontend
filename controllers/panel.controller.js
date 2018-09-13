@@ -3,10 +3,10 @@
 
     app.controller("PanelController", PanelController);
 
-    function PanelController(PanelService, PageSizeSvc, $mdDialog, $mdToast, UnitOfMeasureService) {
+    function PanelController(PanelService, PAGE_SIZE, $mdDialog, $mdToast, UnitOfMeasureService) {
         var self = this;
 
-        self.pageSize = PageSizeSvc;
+        self.pageSize = PAGE_SIZE;
         self.currentPage = 1; 
 
         function select(index) {
@@ -43,7 +43,7 @@
             );
         }
 
-        self.read(self.currentPage, PageSizeSvc);
+        self.read(self.currentPage, PAGE_SIZE);
 
         self.save = function (panel) {
             if (self.isInAddMode) {
@@ -138,7 +138,7 @@
         function onSaveSuccess(message) {
             showToast(message);
             $mdDialog.hide();
-            self.read(self.currentPage, PageSizeSvc);
+            self.read(self.currentPage, PAGE_SIZE);
         }
 
         function onSaveFailure(response, message) {
