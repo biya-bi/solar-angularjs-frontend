@@ -11,24 +11,36 @@
 			</div>
 		</md-toolbar>
 		<md-content flex>
-			<table class="table table-striped table-hover">
+			<table class="table table-striped table-hover" ng-controller="TableSortController as tableSortCtrl" ng-init="tableSortCtrl.init('serial','asc')">
 				<thead>
 					<tr>
-						<th style="width:auto">Serial</th>
-						<th style="width:auto">Latitude</th>
-						<th style="width:auto">Longitude</th>
-						<th style="width:auto">Brand</th>
-						<th style="width:auto">Unit of measure</th>
+						<th style="width:auto" ng-click='tableSortCtrl.toggle("serial");panelCtrl.setSortProperty("serial")'>Serial
+							<sort-glyph direction='tableSortCtrl.direction' visible='tableSortCtrl.column=="serial"' />
+						</th>
+						<th style="width:auto" ng-click='tableSortCtrl.toggle("latitude");panelCtrl.setSortProperty("latitude")'>Latitude
+							<sort-glyph direction='tableSortCtrl.direction' visible='tableSortCtrl.column=="latitude"' />
+						</th>
+						<th style="width:auto" ng-click='tableSortCtrl.toggle("longitude");panelCtrl.setSortProperty("longitude")'>Longitude
+							<sort-glyph direction='tableSortCtrl.direction' visible='tableSortCtrl.column=="longitude"' />
+						</th>
+						<th style="width:auto" ng-click='tableSortCtrl.toggle("brand");panelCtrl.setSortProperty("brand")'>Brand
+							<sort-glyph direction='tableSortCtrl.direction' visible='tableSortCtrl.column=="brand"' />
+						</th>
+						<th style="width:auto" ng-click='tableSortCtrl.toggle("unitOfMeasure");panelCtrl.setSortProperty("unitOfMeasure")'>Unit
+							of measure
+							<sort-glyph direction='tableSortCtrl.direction' visible='tableSortCtrl.column=="unitOfMeasure"' />
+						</th>
 						<th style="width:auto">Actions</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="panel in panelCtrl.panels" ng-click="panelCtrl.select($index)">
+					<tr ng-repeat="panel in panelCtrl.panels | orderBy : tableSortCtrl.column : tableSortCtrl.direction=='desc':panelCtrl.compare"
+					 ng-click="panelCtrl.select($index)">
 						<td>{{panel.serial}}</td>
 						<td>{{panel.latitude}}</td>
 						<td>{{panel.longitude}}</td>
 						<td>{{panel.brand}}</td>
-						<td ng-controller="UnitOfMeasureController as uomCtrl">{{uomCtrl.getName(panel.unitOfMeasure)}}</td>
+						<td>{{panel.unitOfMeasure|unitOfMeasure}}</td>
 						<td>
 							<a ng-click="panelCtrl.edit($index,$event)" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
 								 title="Edit">edit</i></a>

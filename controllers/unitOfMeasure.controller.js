@@ -2,25 +2,9 @@
     var app = angular.module("panelModule");
     app.controller("UnitOfMeasureController", UnitOfMeasureController);
 
-    function UnitOfMeasureController() {
+    function UnitOfMeasureController(UnitOfMeasureService) {
         var self = this;
 
-        self.getName = function (value) {
-            if (value == 'W') return 'Watt';
-            else if (value == 'KW') return 'Kilowatt';
-            return undefined;
-        }
-
-        self.unitsOfMeasure =
-            [
-                {
-                    value: 'W',
-                    name: 'Watt'
-                },
-                {
-                    value: 'KW',
-                    name: 'Kilowatt'
-                }
-            ];
+        self.unitsOfMeasure = UnitOfMeasureService.getUnitsOfMeasure();
     }
 })();

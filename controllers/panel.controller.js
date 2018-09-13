@@ -3,11 +3,11 @@
 
     app.controller("PanelController", PanelController);
 
-    function PanelController(PanelService, PageSizeSvc, $mdDialog, $mdToast) {
+    function PanelController(PanelService, PageSizeSvc, $mdDialog, $mdToast, UnitOfMeasureService) {
         var self = this;
 
         self.pageSize = PageSizeSvc;
-        self.currentPage = 1;
+        self.currentPage = 1; 
 
         function select(index) {
             self.selectedPanel = self.panels[index];
@@ -155,5 +155,26 @@
             showToast(msg);
         }
 
+        self.compare = function (obj1, obj2) {
+            var v1 = null;
+            var v2 = null;
+
+            if (self.sortProperty === 'unitOfMeasure') {
+                v1 = UnitOfMeasureService.getName(obj1.value);
+                v2 = UnitOfMeasureService.getName(obj2.value);
+            }
+            else {
+                v1 = obj1.value;
+                v2 = obj2.value;
+            }
+
+            if (v1 === v2) return 0;
+            if (v1 > v2) return 1;
+            return -1;
+        }
+
+        self.setSortProperty = function (property) {
+            self.sortProperty = property;
+        }
     }
 })();

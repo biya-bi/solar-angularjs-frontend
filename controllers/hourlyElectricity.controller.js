@@ -3,7 +3,7 @@
 
     app.controller("HourlyElectricityController", HourlyElectricityController);
 
-    function HourlyElectricityController(PanelService, PageSizeSvc, $mdDialog, $mdToast) {
+    function HourlyElectricityController(PanelService, PageSizeSvc, $mdDialog, $mdToast, ArrayDateService) {
         var self = this;
         self.isInAddMode = false;
         self.isInEditMode = false;
@@ -139,9 +139,36 @@
             }
             showToast(msg);
         }
-                
+
         self.canAdd = function () {
             return self.panel != null;
+        }
+
+        self.compare = function (obj1, obj2) {
+            var v1 = null;
+            var v2 = null;
+
+            if (self.sortProperty === 'readingAt') {
+                // The date is received by this method as a string of numbers
+                // separated by commons. We therefore need to split the string
+                // using the comma as the separator. This will convert the string
+                // into an array of substrings which can then be passed to the
+                // ArrayDateService.toLocaleDate method
+                v1 = ArrayDateService.toLocaleDate(obj1.value.split(','));
+                v2 = ArrayDateService.toLocaleDate(obj2.value.split(','));
+            }
+            else {
+                v1 = obj1.value;
+                v2 = obj2.value;
+            }
+
+            if (v1 === v2) return 0;
+            if (v1 > v2) return 1;
+            return -1;
+        }
+
+        self.setSortProperty = function (property) {
+            self.sortProperty = property;
         }
     }
 })();
