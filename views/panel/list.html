@@ -34,17 +34,16 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="panel in panelCtrl.panels | orderBy : tableSortCtrl.column : tableSortCtrl.direction=='desc':panelCtrl.compare"
-					 ng-click="panelCtrl.select($index)">
+					<tr ng-repeat="panel in panelCtrl.panels | orderBy : tableSortCtrl.column : tableSortCtrl.direction=='desc':panelCtrl.compare">
 						<td>{{panel.serial}}</td>
 						<td>{{panel.latitude}}</td>
 						<td>{{panel.longitude}}</td>
 						<td>{{panel.brand}}</td>
 						<td>{{panel.unitOfMeasure|unitOfMeasure}}</td>
 						<td>
-							<a ng-click="panelCtrl.edit($index,$event)" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
+							<a ng-click="panelCtrl.edit(panel,$event)" class="edit" data-toggle="tooltip"><i class="material-icons" data-toggle="tooltip"
 								 title="Edit">edit</i></a>
-							<a ng-click="panelCtrl.delete($index,$event)" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
+							<a ng-click="panelCtrl.delete(panel,$event)" class="delete" data-toggle="tooltip"><i class="material-icons" data-toggle="tooltip"
 								 title="Delete">delete</i></a>
 							<a href="#hourlyElectricities" ng-click="hourlyElectricityCtrl.read(panel)">
 								<i class="material-icons" data-toggle="tooltip" title="View Houly Electricities" ng-click="navCtlr.select('hourly_electricities')">timer</i></a>

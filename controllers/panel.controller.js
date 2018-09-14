@@ -9,10 +9,6 @@
         self.pageSize = PAGE_SIZE;
         self.currentPage = 1; 
 
-        function select(index) {
-            self.selectedPanel = self.panels[index];
-        }
-
         function computePages(size) {
             PanelService.getPanelsCount().then(
                 function (count) {
@@ -109,21 +105,20 @@
             $mdDialog.show(getDialogOptions(event, 'add', self.save, '/views/panel/add_edit.html'));
         }
 
-        self.edit = function (index, event) {
+        self.edit = function (panel, event) {
             self.isInAddMode = false;
             self.isInEditMode = true;
             self.isInDeleteMode = false;
-            select(index);
 
-            $mdDialog.show(getDialogOptions(event, 'edit', self.save, '/views/panel/add_edit.html', self.selectedPanel));
+            $mdDialog.show(getDialogOptions(event, 'edit', self.save, '/views/panel/add_edit.html', panel));
         }
 
-        self.delete = function (index, event) {
+        self.delete = function (panel, event) {
             self.isInAddMode = false;
             self.isInEditMode = false;
             self.isInDeleteMode = true;
-            select(index);
-            $mdDialog.show(getDialogOptions(event, 'delete', self.save, '/views/panel/delete.html', self.selectedPanel));
+
+            $mdDialog.show(getDialogOptions(event, 'delete', self.save, '/views/panel/delete.html', panel));
         }
 
         function showToast(message) {
