@@ -24,19 +24,28 @@
             <table class="table table-striped table-hover" ng-controller="TableSortController as tableSortCtrl" ng-init="tableSortCtrl.init('readingAt','desc')">
                 <thead>
                     <tr>
-                        <th ng-click='tableSortCtrl.toggle("generatedElectricity");hourlyElectricityCtrl.setSortProperty("generatedElectricity")'>Generated units
+                        <th ng-click='tableSortCtrl.toggle("generatedElectricity");hourlyElectricityCtrl.setSortProperty("generatedElectricity")'>Generated
+                            units
                             <sort-glyph direction='tableSortCtrl.direction' visible='tableSortCtrl.column=="generatedElectricity"' />
                         </th>
-                        <th ng-click='tableSortCtrl.toggle("readingAt");hourlyElectricityCtrl.setSortProperty("readingAt")'>Reading date
+                        <th ng-click='tableSortCtrl.toggle("readingAt");hourlyElectricityCtrl.setSortProperty("readingAt")'>Reading
+                            date
                             <sort-glyph direction='tableSortCtrl.direction' visible='tableSortCtrl.column=="readingAt"' />
                         </th>
+                        <th style="width:auto">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="hourlyElectricity in hourlyElectricityCtrl.hourlyElectricities | orderBy : tableSortCtrl.column : tableSortCtrl.direction=='desc': hourlyElectricityCtrl.compare">
+                    <tr ng-repeat="hourlyElectricity in hourlyElectricityCtrl.hourlyElectricities | orderBy : tableSortCtrl.column : tableSortCtrl.direction=='desc'">
                         <td>{{hourlyElectricity.generatedElectricity}}</td>
                         <td>
-                            {{hourlyElectricity.readingAt|toLocaleDate|date:'medium'}}
+                            {{hourlyElectricity.readingAt|date:'medium'}}
+                        </td>
+                        <td>
+                            <a ng-click="hourlyElectricityCtrl.edit(hourlyElectricity,$event)" class="edit" data-toggle="modal"><i class="material-icons"
+                                    data-toggle="tooltip" title="Edit">edit</i></a>
+                            <a ng-click="hourlyElectricityCtrl.delete(hourlyElectricity,$event)" class="delete" data-toggle="modal"><i
+                                    class="material-icons" data-toggle="tooltip" title="Delete">delete</i></a>
                         </td>
                     </tr>
                 </tbody>

@@ -11,10 +11,6 @@
         self.pageSize = PAGE_SIZE;
         self.currentPage = 1;
 
-        function select(index) {
-            self.selectedHourlyElectricity = self.hourlyElectricities[index];
-        }
-
         function computePages(size) {
             PanelService.getHourlyElectricitiesCount(self.panel.hourlyUri).then(
                 function (count) {
@@ -57,7 +53,7 @@
                 });
             }
             else if (self.isInEditMode) {
-                PanelService.updateHourlyElectricity(panel, hourlyElectricity).then(function () {
+                PanelService.updateHourlyElectricity(hourlyElectricity).then(function () {
                     onSaveSuccess("Hourly Electricity saved successfully.");
                     self.isInEditMode = false;
                 }, function (response) {
@@ -65,7 +61,7 @@
                 });
             }
             else if (self.isInDeleteMode) {
-                PanelService.deleteHourlyElectricity(panel, hourlyElectricity).then(function () {
+                PanelService.deleteHourlyElectricity(hourlyElectricity).then(function () {
                     onSaveSuccess("Hourly Electricity deleted successfully.");
                     self.isInDeleteMode = false;
                 }, function (response) {
@@ -113,6 +109,23 @@
             $mdDialog.show(getDialogOptions(event, 'add', self.save, '/views/hourly_electricity/add_edit.html', self.panel));
         }
 
+
+        self.edit = function (hourlyElectricity, event) {
+            self.isInAddMode = false;
+            self.isInEditMode = true;
+            self.isInDeleteMode = false;
+
+            $mdDialog.show(getDialogOptions(event, 'edit', self.save, '/views/hourly_electricity/add_edit.html', self.panel, hourlyElectricity));
+        }
+
+        self.delete = function (hourlyElectricity, event) {
+            self.isInAddMode = false;
+            self.isInEditMode = false;
+            self.isInDeleteMode = true;
+
+            $mdDialog.show(getDialogOptions(event, 'delete', self.save, '/views/hourly_electricity/delete.html', self.panel, hourlyElectricity));
+        }
+
         function showToast(message) {
             $mdToast.show(
                 $mdToast.simple()
@@ -142,33 +155,6 @@
 
         self.canAdd = function () {
             return self.panel != null;
-        }
-
-        self.compare = function (obj1, obj2) {
-            var v1 = null;
-            var v2 = null;
-
-            if (self.sortProperty === 'readingAt') {
-                // The date is received by this method as a string of numbers
-                // separated by commons. We therefore need to split the string
-                // using the comma as the separator. This will convert the string
-                // into an array of substrings which can then be passed to the
-                // ArrayDateService.toLocaleDate method
-                v1 = ArrayDateService.toLocaleDate(obj1.value.split(','));
-                v2 = ArrayDateService.toLocaleDate(obj2.value.split(','));
-            }
-            else {
-                v1 = obj1.value;
-                v2 = obj2.value;
-            }
-
-            if (v1 === v2) return 0;
-            if (v1 > v2) return 1;
-            return -1;
-        }
-
-        self.setSortProperty = function (property) {
-            self.sortProperty = property;
         }
     }
 })();

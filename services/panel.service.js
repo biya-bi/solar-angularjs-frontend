@@ -3,7 +3,7 @@
 
     app.service("PanelService", PanelService);
 
-    function PanelService($http, PANEL_RESTFUL_ENDPOINT) {
+    function PanelService($http, PANEL_RESTFUL_ENDPOINT, ArrayDateService) {
 
         this.getPanels = function (page, size) {
             var uri = PANEL_RESTFUL_ENDPOINT;
@@ -49,7 +49,11 @@
                 uri = uri + "?page=" + page + "&size=" + size;
             return $http.get(uri).then(
                 function (response) {
-                    return response.data;
+                    var data = response.data;
+                    for (var i = 0; i < data.length; i++) {
+                        data[i].readingAt = ArrayDateService.toLocaleDate(data[i].readingAt);
+                    }
+                    return data;
                 }
             );
         }
@@ -68,6 +72,16 @@
                     console.log(response);
                     return response.data;
                 });
+        }
+
+        this.updateHourlyElectricity = function (hourlyElectricity) {
+            return $http.put(hourlyElectricity.uri, hourlyElectricity)
+                .then(function (response) { console.log(response); });
+        }
+
+        this.deleteHourlyElectricity = function (hourlyElectricity) {
+            return $http.delete(hourlyElectricity.uri)
+                .then(function (response) { console.log(response); });
         }
 
         this.getDailyElectricities = function (dailyUri) {

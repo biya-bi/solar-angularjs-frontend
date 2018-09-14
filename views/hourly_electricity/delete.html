@@ -1,0 +1,24 @@
+<md-dialog>
+    <form ng-cloak novalidate>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h4 class="modal-title">Delete Hourly Electricity</h4>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="hourlyElectricityCtrl.cancel()">
+                    <md-icon md-svg-src="/img/icons/close_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <p>Are you sure you want to delete?</p>
+                <small md-colors="{color: 'red-500'}">This action cannot be undone.</small>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button class="md-raised" ng-click="hourlyElectricityCtrl.cancel()">Cancel</md-button>
+            <md-button class="md-raised md-warn" ng-click="hourlyElectricityCtrl.process(hourlyElectricityCtrl.panel,hourlyElectricityCtrl.hourlyElectricity)">Delete</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
