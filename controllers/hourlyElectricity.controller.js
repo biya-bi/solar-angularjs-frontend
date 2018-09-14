@@ -32,7 +32,7 @@
 
             if (page <= 0)
                 page = 1;
-            PanelService.getHourlyElectricities(panel.hourlyUri, page - 1, size).then(
+            PanelService.getHourlyElectricities(panel, page - 1, size).then(
                 function (hourlyElectricities) {
                     self.hourlyElectricities = hourlyElectricities;
                 },

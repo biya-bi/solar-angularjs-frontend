@@ -43,8 +43,8 @@
             );
         }
 
-        this.getHourlyElectricities = function (hourlyUri, page, size) {
-            var uri = hourlyUri;
+        this.getHourlyElectricities = function (panel, page, size) {
+            var uri = panel.hourlyUri;
             if (page != null && size != null)
                 uri = uri + "?page=" + page + "&size=" + size;
             return $http.get(uri).then(
@@ -84,8 +84,8 @@
                 .then(function (response) { console.log(response); });
         }
 
-        this.getDailyElectricities = function (dailyUri) {
-            return $http.get(dailyUri).then(
+        this.getDailyElectricities = function (panel) {
+            return $http.get(panel.dailyUri).then(
                 function (response) {
                     return response.data;
                 }

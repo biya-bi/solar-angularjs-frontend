@@ -9,7 +9,7 @@
         self.read = function (panel) {
             self.panel = panel;
 
-            PanelService.getDailyElectricities(panel.dailyUri).then(
+            PanelService.getDailyElectricities(panel).then(
                 function (dailyElectricities) {
                     self.dailyElectricities = dailyElectricities;
                 },
