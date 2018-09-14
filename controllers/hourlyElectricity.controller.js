@@ -12,7 +12,7 @@
         self.currentPage = 1;
 
         function computePages(size) {
-            PanelService.getHourlyElectricitiesCount(self.panel.hourlyUri).then(
+            PanelService.getHourlyElectricitiesCount(self.panel).then(
                 function (count) {
                     self.totalItems = count;
                     self.noOfPages = Math.ceil(parseFloat(count) / size);

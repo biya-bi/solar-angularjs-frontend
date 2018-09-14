@@ -58,8 +58,8 @@
             );
         }
 
-        this.getHourlyElectricitiesCount = function (hourlyUri) {
-            return $http.get(hourlyUri + "/count").then(
+        this.getHourlyElectricitiesCount = function (panel) {
+            return $http.get(panel.hourlyCountUri).then(
                 function (response) {
                     return response.data;
                 }
