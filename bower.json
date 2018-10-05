@@ -1,0 +1,24 @@
+{
+  "name": "solar-angularjs-frontend",
+  "description": "This repository represents a front-end of the Solar application. We hope you will enjoy the journey with us!",
+  "main": "index.js",
+  "authors": [
+    "Paul Muriel Biya-Bi <biya-bi@hotmail.fr>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/biya-bi/solar-angularjs-frontend",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "angular-mocks": "^1.7.5"
+  },
+  "dependencies": {
+    "angular": "^1.7.5",
+    "angular-material": "^1.1.10"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "solar-angularjs-frontend",
+  "version": "1.0.0",
+  "description": "This repository represents a front-end of the Solar application. We hope you will enjoy the journey with us!",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/karma/bin/karma start karma.conf.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/biya-bi/solar-angularjs-frontend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/biya-bi/solar-angularjs-frontend/issues"
+  },
+  "homepage": "https://github.com/biya-bi/solar-angularjs-frontend#readme",
+  "devDependencies": {
+    "jasmine-core": "^3.2.1",
+    "karma": "^3.0.0",
+    "karma-jasmine": "^1.1.2",
+    "karma-phantomjs-launcher": "^1.0.4"
+  }
+}
